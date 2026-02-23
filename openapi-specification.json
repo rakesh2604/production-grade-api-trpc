@@ -1,0 +1,426 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "My TODO Server",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api"
+        }
+    ],
+    "paths": {
+        "/create-todo": {
+            "post": {
+                "operationId": "todo-createTodo",
+                "description": "Creates a new todo",
+                "tags": [
+                    "Todo"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "title"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "todo": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "description": "UUID of the todo"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "description": "Title of the todo"
+                                                },
+                                                "description": {
+                                                    "anyOf": [
+                                                        {
+                                                            "type": "string"
+                                                        },
+                                                        {
+                                                            "type": "null"
+                                                        }
+                                                    ],
+                                                    "description": "description for the todo"
+                                                },
+                                                "isCompleted": {
+                                                    "default": false,
+                                                    "description": "if the todo is completed or not",
+                                                    "type": "boolean"
+                                                }
+                                            },
+                                            "required": [
+                                                "id",
+                                                "title",
+                                                "isCompleted"
+                                            ],
+                                            "additionalProperties": false
+                                        }
+                                    },
+                                    "required": [
+                                        "todo"
+                                    ],
+                                    "additionalProperties": false
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error.BAD_REQUEST"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Authorization not provided",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Insufficient access",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error.FORBIDDEN"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/todos": {
+            "get": {
+                "operationId": "todo-getAllTodos",
+                "description": "Returns all the todos",
+                "tags": [
+                    "Todo"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "todos": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "description": "UUID of the todo"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "description": "Title of the todo"
+                                                    },
+                                                    "description": {
+                                                        "anyOf": [
+                                                            {
+                                                                "type": "string"
+                                                            },
+                                                            {
+                                                                "type": "null"
+                                                            }
+                                                        ],
+                                                        "description": "description for the todo"
+                                                    },
+                                                    "isCompleted": {
+                                                        "default": false,
+                                                        "description": "if the todo is completed or not",
+                                                        "type": "boolean"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "id",
+                                                    "title",
+                                                    "isCompleted"
+                                                ],
+                                                "additionalProperties": false
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "todos"
+                                    ],
+                                    "additionalProperties": false
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Authorization not provided",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Insufficient access",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error.FORBIDDEN"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "error.BAD_REQUEST": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "The error message",
+                        "example": "Invalid input data"
+                    },
+                    "code": {
+                        "type": "string",
+                        "description": "The error code",
+                        "example": "BAD_REQUEST"
+                    },
+                    "issues": {
+                        "description": "An array of issues that were responsible for the error",
+                        "example": [],
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ],
+                            "additionalProperties": false
+                        }
+                    }
+                },
+                "required": [
+                    "message",
+                    "code"
+                ],
+                "additionalProperties": false,
+                "title": "Invalid input data error (400)",
+                "description": "The error information",
+                "example": {
+                    "code": "BAD_REQUEST",
+                    "message": "Invalid input data",
+                    "issues": []
+                }
+            },
+            "error.UNAUTHORIZED": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "The error message",
+                        "example": "Authorization not provided"
+                    },
+                    "code": {
+                        "type": "string",
+                        "description": "The error code",
+                        "example": "UNAUTHORIZED"
+                    },
+                    "issues": {
+                        "description": "An array of issues that were responsible for the error",
+                        "example": [],
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ],
+                            "additionalProperties": false
+                        }
+                    }
+                },
+                "required": [
+                    "message",
+                    "code"
+                ],
+                "additionalProperties": false,
+                "title": "Authorization not provided error (401)",
+                "description": "The error information",
+                "example": {
+                    "code": "UNAUTHORIZED",
+                    "message": "Authorization not provided",
+                    "issues": []
+                }
+            },
+            "error.FORBIDDEN": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "The error message",
+                        "example": "Insufficient access"
+                    },
+                    "code": {
+                        "type": "string",
+                        "description": "The error code",
+                        "example": "FORBIDDEN"
+                    },
+                    "issues": {
+                        "description": "An array of issues that were responsible for the error",
+                        "example": [],
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ],
+                            "additionalProperties": false
+                        }
+                    }
+                },
+                "required": [
+                    "message",
+                    "code"
+                ],
+                "additionalProperties": false,
+                "title": "Insufficient access error (403)",
+                "description": "The error information",
+                "example": {
+                    "code": "FORBIDDEN",
+                    "message": "Insufficient access",
+                    "issues": []
+                }
+            },
+            "error.INTERNAL_SERVER_ERROR": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "The error message",
+                        "example": "Internal server error"
+                    },
+                    "code": {
+                        "type": "string",
+                        "description": "The error code",
+                        "example": "INTERNAL_SERVER_ERROR"
+                    },
+                    "issues": {
+                        "description": "An array of issues that were responsible for the error",
+                        "example": [],
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ],
+                            "additionalProperties": false
+                        }
+                    }
+                },
+                "required": [
+                    "message",
+                    "code"
+                ],
+                "additionalProperties": false,
+                "title": "Internal server error error (500)",
+                "description": "The error information",
+                "example": {
+                    "code": "INTERNAL_SERVER_ERROR",
+                    "message": "Internal server error",
+                    "issues": []
+                }
+            }
+        },
+        "securitySchemes": {
+            "Authorization": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
